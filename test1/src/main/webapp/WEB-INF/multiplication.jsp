@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Table de Multiplication</title>
-    <link href="[https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"](https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap") rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
                 <label for="nombre">Entrez un nombre</label>
                 <input type="number" id="nombre" name="nombre" placeholder="Entrez un nombre" required min="1" max="100">
             </div>
-            <button type="submit" class="login-btn">Générer la table</bu tton>
+            <button type="submit" class="login-btn">Générer la table</button>
         </form>
     </div>
 </body>

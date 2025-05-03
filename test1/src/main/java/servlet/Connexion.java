@@ -29,9 +29,7 @@ public class Connexion extends HttpServlet {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
         String message;
-         
         
-        if ("admin".equals(login) )
         // Valider les identifiants
         if (login != null && password != null) {
             if (login.equals(VALID_LOGIN) && password.equals(VALID_PASSWORD)) {
@@ -41,10 +39,9 @@ public class Connexion extends HttpServlet {
                 
                 message = "<span style='color: green'>Connexion réussie !</span>";
                 
-                // Redirect to welcome page or dashboard after successful login
-                // Uncomment the next line and replace with the appropriate path
-                // response.sendRedirect(request.getContextPath() + "/dashboard");
-                // return;
+                // Redirect to welcome page after successful login
+                response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                return;
             } else {
                 message = "<span style='color: red'>Échec de connexion. Login ou mot de passe incorrect.</span>";
             }
