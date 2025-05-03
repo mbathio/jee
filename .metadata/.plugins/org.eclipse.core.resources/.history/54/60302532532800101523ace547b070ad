@@ -20,6 +20,9 @@
             </div>
             <button type="submit" class="login-btn">Générer la table</button>
         </form>
+        <div class="additional-links">
+            <a href="index.jsp">Retour à l'accueil</a>
+        </div>
     </div>
 </body>
 </html>
