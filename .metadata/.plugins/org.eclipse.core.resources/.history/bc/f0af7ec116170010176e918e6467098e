@@ -1,0 +1,82 @@
+//package servlet;
+//
+//
+//import java.io.IOException;
+//import java.io.PrintWriter;
+//import jakarta.servlet.ServletException;
+//import jakarta.servlet.annotation.WebServlet;
+//import jakarta.servlet.http.HttpServlet;
+//import jakarta.servlet.http.HttpServletRequest;
+//import jakarta.servlet.http.HttpServletResponse;
+//
+//@WebServlet("/connexion")
+//public class Connexion extends HttpServlet {
+//    private static final String VALID_LOGIN = "admin";
+//    private static final String VALID_PASSWORD = "passer";
+//    
+//    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+//            throws ServletException, IOException {
+//        
+//        response.setContentType("text/html");
+//        PrintWriter out = response.getWriter();
+//        
+//        String login = request.getParameter("login");
+//        String password = request.getParameter("password");
+//        
+//        out.println("<html><body>");
+//        
+//        if (login != null && password != null) {
+//            if (login.equals(VALID_LOGIN) && password.equals(VALID_PASSWORD)) {
+//                out.println("<h2 style='color: green'>Connexion réussie !</h2>");
+//            } else {
+//                out.println("<h2 style='color: red'>Échec de connexion. Login ou mot de passe incorrect.</h2>");
+//            }
+//        } else {
+//            out.println("<p>Utilisez : /connexion?login=xxx&password=yyy</p>");
+//        }
+//        
+//        out.println("</body></html>");
+//    }
+//}
+
+
+
+package servlet;
+
+import java.io.IOException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/connexion")
+public class Connexion extends HttpServlet {
+    private static final String VALID_LOGIN = "admin";
+    private static final String VALID_PASSWORD = "passer";
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        // Récupérer les paramètres du formulaire
+        String login = request.getParameter("login");
+        String password = request.getParameter("password");
+        String message;
+
+        // Valider les identifiants
+        if (login != null && password != null) {
+            if (login.equals(VALID_LOGIN) && password.equals(VALID_PASSWORD)) {
+                message = "<span style='color: green'>Connexion réussie !</span>";
+            } else {
+                message = "<span style='color: red'>Échec de connexion. Login ou mot de passe incorrect.</span>";
+            }
+        } else {
+            message = "<span style='color: orange'>Veuillez saisir vos identifiants.</span>";
+        }
+
+        // Transmettre le message à la JSP
+        request.setAttribute("message", message);
+        request.getRequestDispatcher("connexion.jsp").forward(request, response);
+    }
+}

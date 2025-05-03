@@ -1,0 +1,43 @@
+package forms;
+
+import dao.UtilisateurDao;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
+
+public class AuthentificationForm
+{
+
+    private static final String CHAMP_LOGIN = "login";
+    private static final String CHAMP_PASSWRD = "password";
+    private HttpServletRequest request;
+            
+        public AuthentificationForm( HttpServletRequest request) 
+        {
+            this.request = request; 
+        }
+        private void authentifier() 
+        {
+            String login = getParameter(CHAMP_LOGIN);
+            String password = getParameter(CHAMP_PASSWRD);
+
+            Utilisateur Utilisateur = UtilisateurDao.get(login);
+
+            if (Utilisateur != null && Utilisateur.getPassword().equals(password)) 
+            {
+                HttpSession session = request.getSession();
+                session.setAttribute("user", Utilisateur);
+            }
+        }
+    }
+    
+    private String getParameter(String parameter) 
+    {
+  	  String value = request.getParameter(parameter);
+  	  if(value == null || value.isBlank())
+  	  {
+  		  return null;
+  	  }
+  	   return value.trim();
+    }
+}

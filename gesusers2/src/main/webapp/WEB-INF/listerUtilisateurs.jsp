@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<%@taglib  prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Liste des utilisateurs</title>
+</head>
+<body>
+	<h1>Liste des utilisateurs</h1>
+	
+	<c:choose>
+		
+		 <c:when test="${ empty utilisateurs}">	
+	     	 <p> Desole, la liste des utilisateur est vide.<br></p>	
+		 </c:when>
+	     <c:otherwise>
+	        <table border="1" cellpadding="10" cellspain="0">
+		       		<tr>
+		       			<th>ID</th>
+		       			<th>NOM</th>
+		       			<th>PRENOM</th>
+		       			<th>LOGIN</th>
+		       			<th>PASSWORD</th>
+		       			<th colspan="2">Action</th>
+		       		</tr>
+	                 <c:forEach var="utilisateur" items="${utilisateurs }">
+	                 
+	                 	<tr> 
+	                 
+	       					<td><c:out value="${utilisateur.id }"></c:out></td>
+	       					<td><c:out value="${utilisateur.nom }"></c:out></td>
+	       					<td><c:out value="${utilisateur.prenom }"></c:out></td>
+	       					<td><c:out value="${utilisateur.login }"></c:out></td>
+	       					<td><c:out value="${utilisateur.password }"></c:out></td>
+	       					<td><a href="update?id=<c:out value="${utilisateur.id }"></c:out>">Modifier</a></td>
+	       					<td><a href="delete?id=<c:out value="${utilisateur.id }"></c:out>">Supprimer</a></td>
+	       				</tr>
+	                 </c:forEach>
+	       	</table>			
+	     </c:otherwise>
+	</c:choose>
+<p> <a href="add">Ajouter un utilisateur</a></p>
+	
+</body>
+</html>

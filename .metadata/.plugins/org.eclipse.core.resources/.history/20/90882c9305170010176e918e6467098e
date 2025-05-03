@@ -1,0 +1,26 @@
+package servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+
+@WebServlet("/connexion")
+public class Connexion extends HttpServlet{
+	
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    
+    String login = request.getParameter("login");
+    String password = request.getParameter("password");
+    PrintWriter out = response.getWriter();
+
+
+    if (login.equals("admin") && password.equals("admin")) {
+      System.out.println("Connexion reussie");
+    } else {
+      System.out.println("Connexion echouee");
+    }
+  }
+}
