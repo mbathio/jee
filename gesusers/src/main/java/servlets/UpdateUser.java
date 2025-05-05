@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import beans.Utilisateur;
 import dao.UtilisateurDao;
@@ -27,15 +26,11 @@ public class UpdateUser extends HttpServlet
             try {
                 int id = Integer.parseInt(idParam);
                 
-                // Récupérer la liste des utilisateurs
-                ArrayList<Utilisateur> utilisateurs = UtilisateurDao.lister();
+                // Utiliser la méthode DAO pour trouver l'utilisateur
+                Utilisateur utilisateur = UtilisateurDao.trouver(id);
                 
-                // Chercher l'utilisateur avec l'ID correspondant
-                for (Utilisateur utilisateur : utilisateurs) {
-                    if (utilisateur.getId() == id) {
-                        request.setAttribute("utilisateur", utilisateur);
-                        break;
-                    }
+                if (utilisateur != null) {
+                    request.setAttribute("utilisateur", utilisateur);
                 }
             } catch (NumberFormatException e) {
                 // Gérer l'erreur si l'ID n'est pas un nombre
@@ -60,19 +55,12 @@ public class UpdateUser extends HttpServlet
             try {
                 int id = Integer.parseInt(idParam);
                 
-                // Récupérer la liste des utilisateurs
-                ArrayList<Utilisateur> utilisateurs = UtilisateurDao.lister();
+                // Créer l'objet utilisateur avec les nouvelles valeurs
+                Utilisateur utilisateur = new Utilisateur(id, nom, prenom, login, password);
                 
-                // Chercher et mettre à jour l'utilisateur avec l'ID correspondant
-                for (Utilisateur utilisateur : utilisateurs) {
-                    if (utilisateur.getId() == id) {
-                        utilisateur.setNom(nom);
-                        utilisateur.setPrenom(prenom);
-                        utilisateur.setLogin(login);
-                        utilisateur.setPassword(password);
-                        break;
-                    }
-                }
+                // Utiliser la méthode DAO pour modifier l'utilisateur
+                UtilisateurDao.modifier(utilisateur);
+                
             } catch (NumberFormatException e) {
                 // Gérer l'erreur si l'ID n'est pas un nombre
                 request.setAttribute("erreur", "ID d'utilisateur invalide");
