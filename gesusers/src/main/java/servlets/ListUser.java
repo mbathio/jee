@@ -14,13 +14,12 @@ import dao.UtilisateurDao;
 @WebServlet("/list")
 public class ListUser extends HttpServlet 
 {
-	private static final String VUE_LIST_UTILISATEUR = "/WEB-INF/listerUtilisateurs.jsp";
+    private static final String VUE_LIST_UTILISATEUR = "/WEB-INF/listerUtilisateurs.jsp";
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-		request.setAttribute("utilisateur", UtilisateurDao.lister());
-		getServletContext().getRequestDispatcher(VUE_LIST_UTILISATEUR).forward(request, response);
-	}
-
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        request.setAttribute("utilisateurs", UtilisateurDao.lister());
+        getServletContext().getRequestDispatcher(VUE_LIST_UTILISATEUR).forward(request, response);
+    }
 }
