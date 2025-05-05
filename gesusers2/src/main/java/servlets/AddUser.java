@@ -10,11 +10,13 @@ import java.io.IOException;
 
 import beans.Utilisateur;
 import dao.UtilisateurDao;
+import forms.UserForm;
 
 @WebServlet("/add")
 public class AddUser extends HttpServlet
 {
-    private static final String VUE_AJOUT_UTILISATEUR = "/WEB-INF/ajouterUtilisateur.jsp";
+    // Correction ici pour correspondre au nom du fichier existant
+    private static final String VUE_AJOUT_UTILISATEUR = "/WEB-INF/ajouterUtilisateurs.jsp";
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -25,19 +27,15 @@ public class AddUser extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        // Récupérer les paramètres du formulaire
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        
-        // Créer un nouvel utilisateur
-        Utilisateur utilisateur = new Utilisateur(nom, prenom, login, password);
-        
-        // Ajouter l'utilisateur à la base de données
-        UtilisateurDao.ajouter(utilisateur);
-        
-        // Rediriger vers la liste des utilisateurs
-        response.sendRedirect(request.getContextPath() + "/list");
+        // Utilisation de UserForm pour une meilleure validation
+        UserForm form = new UserForm(request);
+        if (form.ajouter()) {
+            // Rediriger vers la liste des utilisateurs en cas de succès
+            response.sendRedirect(request.getContextPath() + "/list");
+        } else {
+            // En cas d'erreur, afficher les erreurs sur la page du formulaire
+            request.setAttribute("form", form);
+            getServletContext().getRequestDispatcher(VUE_AJOUT_UTILISATEUR).forward(request, response);
+        }
     }
 }

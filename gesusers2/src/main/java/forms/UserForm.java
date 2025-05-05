@@ -64,68 +64,59 @@ public class UserForm {
 	public boolean modifie() {
 	    
 		String id = request.getParameter(CHAMP_ID);
-		  this.status =false;
-		  this.utilisateur=null;
-		if(id !=null && id.matches(id))
+		this.status = false;
+		this.utilisateur = null;
+		
+		if(id != null && id.matches("\\d+")) // Correction ici: vérifier que id est un nombre
 		{
-			this.utilisateur=UtilisateurDao.get(Integer.parseInt(id));
+			this.utilisateur = UtilisateurDao.trouver(Integer.parseInt(id)); // Correction: utiliser trouver() au lieu de get()
 			
-			if(this.utilisateur !=null) 
+			if(this.utilisateur != null) 
 			{
-				this.request.setAttribute("utilisateur", utilisateur);
-				this.statusMessage=ADD_UTILISATEUR;
+				String nom = this.getParameter(CHAMP_NOM);
+				String prenom = this.getParameter(CHAMP_PRENOM);
+				String login = this.getParameter(CHAMP_LOGIN);
+				String password = this.getParameter(CHAMP_PASSWORD);
+				
+				this.validerChamp(CHAMP_NOM, CHAMP_PRENOM, CHAMP_LOGIN, CHAMP_PASSWORD, CHAMP_PASSWORD_BIS);
+				this.validerPassword();
+				
+				this.utilisateur.setNom(nom);
+				this.utilisateur.setPrenom(prenom);
+				this.utilisateur.setLogin(login);
+				this.utilisateur.setPassword(password);
+				
+				if(this.erreurs.isEmpty())
+				{
+					this.status = UtilisateurDao.modifier(utilisateur);
+					if(this.status) {
+						this.statusMessage = UPDATE_USER_SUCCESS_MESSAGE;
+					}
+					else {
+						this.statusMessage = UPDATE_USER_FAILLURE_MESSAGE;
+					}
+				}
+			}
+			else {
+				this.statusMessage = ADD_UTILISATEUR;
+				request.setAttribute("utilisateur", null); // Informer la vue qu'il n'y a pas d'utilisateur
 			}
 		}
-		
-		String nom = this.getParameter(CHAMP_NOM);
-	    String prenom = this.getParameter(CHAMP_PRENOM);
-	    String login = this.getParameter(CHAMP_LOGIN);
-	    String password = this.getParameter(CHAMP_PASSWORD);
-	    String passwordBis = this.getParameter(CHAMP_PASSWORD_BIS);
-	    
-	    this.validerChamp(CHAMP_NOM,CHAMP_PRENOM,CHAMP_LOGIN,CHAMP_PASSWORD, CHAMP_PASSWORD_BIS);
-		this.validerPassword();
-	    
-		this.utilisateur.setNom(nom);
-		this.utilisateur.setPrenom(prenom);
-		this.utilisateur.setLogin(login);
-		this.utilisateur.setPassword(password);
-		 if(this.erreurs.isEmpty())
-		 {
-			 this.status=UtilisateurDao.modifier(utilisateur);
-			 if(this.status) {
-				 this.statusMessage= UPDATE_USER_SUCCESS_MESSAGE;
-			 }
-			 else {
-				 this.statusMessage= UPDATE_USER_FAILLURE_MESSAGE;
-			 }
-		 }
 	    return this.status;
 	}
 
-	
-	/*public boolean supprimer() 
-	{
-		String id = request.getParameter(CHAMP_ID);
-		
-		if(id !=null && id.matches(id))
-		{
-			UtilisateurDao.supprimer(Integer.parseInt(id));
-		}
-		return false;
-	}*/
 	public boolean supprimer() 
 	{
-		
 		return UserForm.supprimer(request);
 	}
+	
 	public static boolean supprimer(HttpServletRequest request) 
 	{
 		String id = request.getParameter(CHAMP_ID);
 		
-		if(id !=null && id.matches(id))
+		if(id != null && id.matches("\\d+")) // Correction: vérifier que id est un nombre
 		{
-			UtilisateurDao.supprimer(Integer.parseInt(id));
+			return UtilisateurDao.supprimer(Integer.parseInt(id)); // Renvoyer le résultat de la suppression
 		}
 		return false;
 	}
@@ -156,11 +147,10 @@ public class UserForm {
 	String password=this.getParameter(CHAMP_PASSWORD);
 	String passwordBis=this.getParameter(CHAMP_PASSWORD_BIS);
 	
-	if(password !=null && !password.equals(passwordBis)) 
+	if(password !=null && passwordBis != null && !password.equals(passwordBis)) 
 	{
 		this.erreurs.put(CHAMP_PASSWORD, DIFFERENT_PASSWORDS_MESSAGE);
 		this.erreurs.put(CHAMP_PASSWORD_BIS, DIFFERENT_PASSWORDS_MESSAGE);
-
     }
   }
   

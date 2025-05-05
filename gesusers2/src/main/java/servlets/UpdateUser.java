@@ -10,11 +10,13 @@ import java.io.IOException;
 
 import beans.Utilisateur;
 import dao.UtilisateurDao;
+import forms.UserForm;
 
 @WebServlet("/update")
 public class UpdateUser extends HttpServlet 
 {
-    private static final String VUE_UPDATE_UTILISATEUR = "/WEB-INF/modifierUtilisateur.jsp";
+    // Correction pour correspondre au nom du fichier existant
+    private static final String VUE_UPDATE_UTILISATEUR = "/WEB-INF/modificationUtilisateur.jsp";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -31,6 +33,8 @@ public class UpdateUser extends HttpServlet
                 
                 if (utilisateur != null) {
                     request.setAttribute("utilisateur", utilisateur);
+                } else {
+                    request.setAttribute("erreur", "Utilisateur non trouvé");
                 }
             } catch (NumberFormatException e) {
                 // Gérer l'erreur si l'ID n'est pas un nombre
@@ -44,30 +48,16 @@ public class UpdateUser extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        // Récupérer les paramètres du formulaire
-        String idParam = request.getParameter("id");
-        String nom = request.getParameter("nom");
-        String prenom = request.getParameter("prenom");
-        String login = request.getParameter("login");
-        String password = request.getParameter("password");
-        
-        if (idParam != null && !idParam.isEmpty()) {
-            try {
-                int id = Integer.parseInt(idParam);
-                
-                // Créer l'objet utilisateur avec les nouvelles valeurs
-                Utilisateur utilisateur = new Utilisateur(id, nom, prenom, login, password);
-                
-                // Utiliser la méthode DAO pour modifier l'utilisateur
-                UtilisateurDao.modifier(utilisateur);
-                
-            } catch (NumberFormatException e) {
-                // Gérer l'erreur si l'ID n'est pas un nombre
-                request.setAttribute("erreur", "ID d'utilisateur invalide");
-            }
+        // Utilisation de UserForm pour une meilleure validation
+        UserForm form = new UserForm(request);
+        if (form.modifie()) {
+            // Rediriger vers la liste des utilisateurs en cas de succès
+            response.sendRedirect(request.getContextPath() + "/list");
+        } else {
+            // En cas d'erreur, afficher les erreurs sur la page du formulaire
+            request.setAttribute("form", form);
+            request.setAttribute("utilisateur", form.getUtilisateur());
+            getServletContext().getRequestDispatcher(VUE_UPDATE_UTILISATEUR).forward(request, response);
         }
-        
-        // Rediriger vers la liste des utilisateurs
-        response.sendRedirect(request.getContextPath() + "/list");
     }
 }
