@@ -39,6 +39,9 @@ public class hello extends HttpServlet {
             name = "visiteur";
         }
         
+        // Récupérer le chemin du contexte pour les liens CSS
+        String contextPath = request.getContextPath();
+        
         // Generate HTML response
         out.println("<!DOCTYPE html>");
         out.println("<html lang='fr'>");
@@ -47,7 +50,7 @@ public class hello extends HttpServlet {
         out.println("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>");
         out.println("    <title>Bonjour</title>");
         out.println("    <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap' rel='stylesheet'>");
-        out.println("    <link rel='stylesheet' href='css/style.css'>");
+        out.println("    <link rel='stylesheet' href='" + contextPath + "/css/style.css'>");
         out.println("</head>");
         out.println("<body>");
         out.println("    <div class='login-container'>");
@@ -56,7 +59,7 @@ public class hello extends HttpServlet {
         out.println("        </div>");
         out.println("        <p>Il est actuellement " + formattedDateTime + "</p>");
         out.println("        <div class='additional-links'>");
-        out.println("            <a href='index.jsp'>Retour à l'accueil</a>");
+        out.println("            <a href='" + contextPath + "/index.jsp'>Retour à l'accueil</a>");
         out.println("        </div>");
         out.println("    </div>");
         out.println("</body>");

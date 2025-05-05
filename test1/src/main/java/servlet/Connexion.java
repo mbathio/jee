@@ -17,7 +17,15 @@ public class Connexion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Simply forward to the login page when accessed via GET
+        // Vérifier si l'utilisateur est déjà connecté
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("user") != null) {
+            // Rediriger vers le tableau de bord s'il est déjà connecté
+            response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+            return;
+        }
+        
+        // Sinon, afficher la page de connexion
         this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
     }
     
@@ -39,10 +47,9 @@ public class Connexion extends HttpServlet {
                 
                 message = "<span style='color: green'>Connexion réussie !</span>";
                 
-                // Redirect to welcome page or dashboard after successful login
-                // Uncomment the next line and replace with the appropriate path
-                // response.sendRedirect(request.getContextPath() + "/dashboard");
-                // return;
+                // Rediriger vers le tableau de bord après connexion réussie
+                response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+                return;
             } else {
                 message = "<span style='color: red'>Échec de connexion. Login ou mot de passe incorrect.</span>";
             }

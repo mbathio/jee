@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,16 +11,26 @@ import jakarta.servlet.http.HttpServletResponse;
 public class Inscription extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Définir le type de contenu de la réponse
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        // Afficher le formulaire d'inscription
+        this.getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        // Définir l'encodage pour les caractères accentués
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
 
         // Récupérer les paramètres du formulaire
         String nom = request.getParameter("nom");
         String prenom = request.getParameter("prenom");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
+        String message;
 
         // Validation basique des données
         if (nom == null || nom.trim().isEmpty() ||
@@ -29,34 +38,26 @@ public class Inscription extends HttpServlet {
             password == null || password.trim().isEmpty() ||
             email == null || email.trim().isEmpty()) {
             
-            // Réponse en cas de champ manquant
-            out.println("<html><body>");
-            out.println("<h2>Erreur d'inscription</h2>");
-            out.println("<p>Tous les champs sont obligatoires.</p>");
-            out.println("<a href='inscription.jsp'>Retour</a>");
-            out.println("</body></html>");
+            message = "<span style='color: red'>Tous les champs sont obligatoires.</span>";
+            request.setAttribute("message", message);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
             return;
         }
 
-        // Ici, vous pourriez ajouter une logique de validation plus avancée
-        // Par exemple, vérifier la longueur du mot de passe, le format de l'email, etc.
-
         try {
-            // Simulation d'un enregistrement 
-            // Réponse de succès
-            out.println("<html><body>");
-            out.println("<h2>Inscription réussie</h2>");
-            out.println("<p>Bienvenue, " + nom + " " + prenom + "</p>");
-            out.println("<a href='connexion.jsp'>Se connecter</a>");
-            out.println("</body></html>");
+            // Simulation d'un enregistrement réussi
+            message = "<span style='color: green'>Inscription réussie pour " + prenom + " " + nom + "</span>";
+            request.setAttribute("message", message);
+            
+            // Rediriger vers la page de connexion avec un message de succès
+            request.setAttribute("message", message);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
 
         } catch (Exception e) {
             // Gestion des erreurs
-            out.println("<html><body>");
-            out.println("<h2>Erreur lors de l'inscription</h2>");
-            out.println("<p>Une erreur est survenue : " + e.getMessage() + "</p>");
-            out.println("<a href='inscription.jsp'>Réessayer</a>");
-            out.println("</body></html>");
+            message = "<span style='color: red'>Une erreur est survenue : " + e.getMessage() + "</span>";
+            request.setAttribute("message", message);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
         }
     }
 }

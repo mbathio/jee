@@ -10,34 +10,70 @@ import jakarta.servlet.http.HttpServletResponse;
 // Annotation pour configurer l'URL de la servlet
 @WebServlet("/table")
 public class Multiplication extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L ;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Définir le type de contenu de la réponse
-        response.setContentType("text/html;charset=UTF-8");
-
         // Récupérer le paramètre "nombre" depuis l'URL
         String nombreParam = request.getParameter("nombre");
+        
+        // Si le paramètre est absent, afficher le formulaire
+        if (nombreParam == null || nombreParam.trim().isEmpty()) {
+            this.getServletContext().getRequestDispatcher("/WEB-INF/multiplication.jsp").forward(request, response);
+            return;
+        }
+        
         try {
             // Convertir le paramètre en entier
             int nombre = Integer.parseInt(nombreParam);
+            
+            // Définir le type de contenu de la réponse
+            response.setContentType("text/html;charset=UTF-8");
+            
+            // Récupérer le chemin du contexte pour les liens CSS
+            String contextPath = request.getContextPath();
 
+            // Construire la réponse HTML avec le résultat
+            StringBuilder tableHtml = new StringBuilder();
+            tableHtml.append("<!DOCTYPE html>");
+            tableHtml.append("<html lang='fr'>");
+            tableHtml.append("<head>");
+            tableHtml.append("    <meta charset='UTF-8'>");
+            tableHtml.append("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>");
+            tableHtml.append("    <title>Table de multiplication de " + nombre + "</title>");
+            tableHtml.append("    <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap' rel='stylesheet'>");
+            tableHtml.append("    <link rel='stylesheet' href='" + contextPath + "/css/style.css'>");
+            tableHtml.append("</head>");
+            tableHtml.append("<body>");
+            tableHtml.append("    <div class='login-container'>");
+            tableHtml.append("        <div class='login-title'>");
+            tableHtml.append("            <h1>Table de multiplication de " + nombre + "</h1>");
+            tableHtml.append("        </div>");
+            tableHtml.append("        <div class='result-container'>");
+            tableHtml.append("            <ul>");
+            
             // Générer la table de multiplication
-            StringBuilder tableHtml = new StringBuilder("<html><head><title>Table de multiplication</title></head><body>");
-            tableHtml.append("<h1>Table de multiplication pour ").append(nombre).append("</h1>");
-            tableHtml.append("<ul>");
             for (int i = 1; i <= 10; i++) {
-                tableHtml.append("<li>").append(nombre).append(" x ").append(i).append(" = ").append(nombre * i).append("</li>");
+                tableHtml.append("                <li>" + nombre + " × " + i + " = " + (nombre * i) + "</li>");
             }
-            tableHtml.append("</ul>");
-            tableHtml.append("</body></html>");
+            
+            tableHtml.append("            </ul>");
+            tableHtml.append("        </div>");
+            tableHtml.append("        <div class='additional-links'>");
+            tableHtml.append("            <a href='" + contextPath + "/table'>Calculer une autre table</a>");
+            tableHtml.append("            <a href='" + contextPath + "/index.jsp'>Retour à l'accueil</a>");
+            tableHtml.append("        </div>");
+            tableHtml.append("    </div>");
+            tableHtml.append("</body>");
+            tableHtml.append("</html>");
 
             // Envoyer la réponse au client
             response.getWriter().write(tableHtml.toString());
+            
         } catch (NumberFormatException e) {
-            // Gérer le cas où le paramètre "nombre" n'est pas valide
-            response.getWriter().write("<html><body><h1>Erreur : veuillez fournir un nombre valide.</h1></body></html>");
+            // Rediriger vers la page JSP avec un message d'erreur
+            request.setAttribute("erreur", "Veuillez entrer un nombre valide.");
+            this.getServletContext().getRequestDispatcher("/WEB-INF/multiplication.jsp").forward(request, response);
         }
     }
 }
