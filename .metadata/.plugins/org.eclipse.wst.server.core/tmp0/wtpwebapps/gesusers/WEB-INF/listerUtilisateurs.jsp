@@ -1,94 +1,53 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="beans.Utilisateur" %>
 
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Liste des utilisateurs</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        .action-link {
-            text-decoration: none;
-            margin-right: 10px;
-        }
-        .edit-link {
-            color: #0066cc;
-        }
-        .delete-link {
-            color: #cc0000;
-        }
-        .add-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        .no-users {
-            margin-top: 20px;
-            color: #666;
-        }
-    </style>
-</head>
+<!-- ... en-tête inchangée ... -->
 <body>
     <h1>Liste des utilisateurs</h1>
     
-    <c:choose>
-        <c:when test="${empty utilisateurs}">
-            <p class="no-users">Aucun utilisateur enregistré.</p>
-        </c:when>
-        <c:otherwise>
-            <table>
-                <thead>
+    <% 
+    ArrayList<Utilisateur> utilisateurs = (ArrayList<Utilisateur>) request.getAttribute("utilisateurs");
+    if (utilisateurs == null || utilisateurs.isEmpty()) {
+    %>
+        <p class="no-users">Aucun utilisateur enregistré.</p>
+    <% 
+    } else {
+    %>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Login</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+                for (Utilisateur utilisateur : utilisateurs) {
+                %>
                     <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Login</th>
-                        <th>Actions</th>
+                        <td><%= utilisateur.getId() %></td>
+                        <td><%= utilisateur.getNom() %></td>
+                        <td><%= utilisateur.getPrenom() %></td>
+                        <td><%= utilisateur.getLogin() %></td>
+                        <td>
+                            <a href="update?id=<%= utilisateur.getId() %>" class="action-link edit-link">Modifier</a>
+                            <a href="delete?id=<%= utilisateur.getId() %>" class="action-link delete-link" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <c:forEach items="${utilisateurs}" var="utilisateur">
-                        <tr>
-                            <td>${utilisateur.id}</td>
-                            <td>${utilisateur.nom}</td>
-                            <td>${utilisateur.prenom}</td>
-                            <td>${utilisateur.login}</td>
-                            <td>
-                                <a href="update?id=${utilisateur.id}" class="action-link edit-link">Modifier</a>
-                                <a href="delete?id=${utilisateur.id}" class="action-link delete-link" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </c:otherwise>
-    </c:choose>
+                <% 
+                }
+                %>
+            </tbody>
+        </table>
+    <% 
+    }
+    %>
     
     <a href="add" class="add-button">Ajouter un utilisateur</a>
 </body>
