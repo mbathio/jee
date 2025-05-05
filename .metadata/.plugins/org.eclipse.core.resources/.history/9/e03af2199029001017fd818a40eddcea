@@ -15,8 +15,8 @@ import forms.UserForm;
 @WebServlet("/update")
 public class UpdateUser extends HttpServlet 
 {
-    // Correction to match the actual file name
-    private static final String VUE_UPDATE_UTILISATEUR = "/WEB-INF/modifierUtilisateur.jsp";
+    // Correction pour correspondre au nom du fichier existant
+    private static final String VUE_UPDATE_UTILISATEUR = "/WEB-INF/modificationUtilisateur.jsp";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
