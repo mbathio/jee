@@ -1,82 +1,124 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.Map" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1">
-    <title>${utilisateur.id != null ? "Modifier un Utilisateur" : "Ajouter un Utilisateur"}</title>
+    <meta charset="UTF-8">
+    <title>Ajouter un utilisateur</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            max-width: 500px;
+            margin: 20px 0;
         }
         label {
             display: block;
-            margin: 15px 0 5px;
+            margin-top: 10px;
         }
         input[type="text"], input[type="password"] {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
         }
         button {
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
+            padding: 10px 15px;
+            margin-top: 20px;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #45a049;
-        }
-        a {
-            display: block;
+        .links {
             margin-top: 20px;
-            text-align: center;
-            color: blue;
-            text-decoration: none;
         }
-        a:hover {
-            text-decoration: underline;
+        .links a {
+            text-decoration: none;
+            color: #0066cc;
+            margin-right: 15px;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
-
 <body>
-	 <h1>Ajouter Utilisateur</h1>
-	 
-	 <form method="post">
-	   <label for="nom">Nom</label>
-	   <input type="text" id="nom" name="nom" value="${utilisateur.nom }">
-	   <c:if test="${!empty erreurs.nom }">
-	   	<span class="error">${erreurs.nom}</span>
-	   </c:if>
-	   <label for="prenom">Pr�nom</label>
-	   <input type="text" id="prenom" name="prenom" value="${utilisateur.prenom}">
-	   <c:if test="${!empty erreurs.prenom }">
-	   	<span class="error">${erreurs.prenom }</span>
-	   </c:if>
-	   <label for="login">Login</label>
-	   <input type="text" id="login" name="login" value="${utilisateur.login  }">
-	   <c:if test="${!empty erreurs.login }">
-	   	<span class="error">${erreurs.login }</span>
-	   </c:if>
-	   <label for="password">Password</label><br>
-	   <input type="password" id="password" name="password">
-	   <c:if test="${!empty erreurs.password }">
-	   	<span class="error">${erreurs.password }</span>
-	   </c:if>
-	   <label for="passwordBis">Password (confirmation)</label><br>
-	   <input type="password" id="passwordBis" name="passwordBis">
-	   <c:if test="${!empty erreurs.password }">
-	   	<span class="error">${erreurs.password}</span>
-	   </c:if>
-	   <input type="submit" value="Ajouter">
-	 </form>
-
+    <h1>Ajouter un utilisateur</h1>
+    
+    <% 
+    // Récupérer les erreurs s'il y en a
+    Map<String, String> erreurs = null;
+    String statusMessage = null;
+    if(request.getAttribute("form") != null) {
+        erreurs = (Map<String, String>)((forms.UserForm)request.getAttribute("form")).getErreurs();
+        statusMessage = ((forms.UserForm)request.getAttribute("form")).getStatusMessage();
+    }
+    %>
+    
+    <% if(statusMessage != null) { %>
+        <p class="success">${form.statusMessage}</p>
+    <% } %>
+    
+    <form action="add" method="post">
+        <div>
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required>
+            <% if(erreurs != null && erreurs.containsKey("nom")) { %>
+                <span class="error"><%= erreurs.get("nom") %></span>
+            <% } %>
+        </div>
+        
+        <div>
+            <label for="prenom">Prénom :</label>
+            <input type="text" id="prenom" name="prenom" required>
+            <% if(erreurs != null && erreurs.containsKey("prenom")) { %>
+                <span class="error"><%= erreurs.get("prenom") %></span>
+            <% } %>
+        </div>
+        
+        <div>
+            <label for="login">Login :</label>
+            <input type="text" id="login" name="login" required>
+            <% if(erreurs != null && erreurs.containsKey("login")) { %>
+                <span class="error"><%= erreurs.get("login") %></span>
+            <% } %>
+        </div>
+        
+        <div>
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" name="password" required>
+            <% if(erreurs != null && erreurs.containsKey("password")) { %>
+                <span class="error"><%= erreurs.get("password") %></span>
+            <% } %>
+        </div>
+        
+        <div>
+            <label for="passwordBis">Confirmez le mot de passe :</label>
+            <input type="password" id="passwordBis" name="passwordBis" required>
+            <% if(erreurs != null && erreurs.containsKey("passwordBis")) { %>
+                <span class="error"><%= erreurs.get("passwordBis") %></span>
+            <% } %>
+        </div>
+        
+        <button type="submit">Enregistrer</button>
+    </form>
+    
+    <div class="links">
+        <a href="list">Retour à la liste</a>
+    </div>
 </body>
 </html>
