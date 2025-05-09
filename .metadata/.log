@@ -4551,3 +4551,6 @@ This warning can be switched off on the Team > Git > Confirmations and Warnings 
 
 !ENTRY org.eclipse.wst.sse.core 2 2 2025-05-09 12:22:16.375
 !MESSAGE Detected content type did not match one for which a model handler is registered: org.eclipse.wildwebdeveloper.html vs. org.eclipse.wst.html.core.htmlsource
+
+!ENTRY org.eclipse.wst.server.core 4 0 2025-05-09 13:02:14.271
+!MESSAGE Server Tomcat v10.1 Server at localhost failed to start.
