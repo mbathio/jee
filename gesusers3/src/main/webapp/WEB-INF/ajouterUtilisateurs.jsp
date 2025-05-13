@@ -2,7 +2,7 @@
 <%@ page import="java.util.Map" %>
 
 <%-- Inclusion du header --%>
-<%@ include file="header.jsp" %>
+<%@ include file="inc/header.jsp" %>
 
 <h1>Ajouter un utilisateur</h1>
 
@@ -65,4 +65,4 @@ if(request.getAttribute("form") != null) {
 </form>
 
 <%-- Inclusion du footer --%>
-<%@ include file="footer.jsp" %>
+<%@ include file="inc/footer.jsp" %>

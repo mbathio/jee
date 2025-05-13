@@ -3,7 +3,7 @@
 <%@ page import="beans.Utilisateur" %>
 
 <%-- Inclusion du header --%>
-<%@ include file="header.jsp" %>
+<%@ include file="inc/header.jsp" %>
 
 <h1>Liste des utilisateurs</h1>
 
@@ -29,6 +29,7 @@ if (utilisateurs == null || utilisateurs.isEmpty()) {
             <tbody>
                 <% 
                 for (Utilisateur utilisateur : utilisateurs) {
+                    if (utilisateur != null) {
                 %>
                     <tr>
                         <td><%= utilisateur.getId() %></td>
@@ -41,6 +42,7 @@ if (utilisateurs == null || utilisateurs.isEmpty()) {
                         </td>
                     </tr>
                 <% 
+                    }
                 }
                 %>
             </tbody>
@@ -55,4 +57,4 @@ if (utilisateurs == null || utilisateurs.isEmpty()) {
 </div>
 
 <%-- Inclusion du footer --%>
-<%@ include file="footer.jsp" %>
+<%@ include file="inc/footer.jsp" %>

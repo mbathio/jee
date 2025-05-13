@@ -3,7 +3,7 @@
 <%@ page import="beans.Utilisateur" %>
 
 <%-- Inclusion du header --%>
-<%@ include file="header.jsp" %>
+<%@ include file="inc/header.jsp" %>
 
 <h1>Modifier un utilisateur</h1>
 
@@ -85,4 +85,4 @@ if(utilisateur != null) {
 %>
 
 <%-- Inclusion du footer --%>
-<%@ include file="footer.jsp" %>
+<%@ include file="inc/footer.jsp" %>

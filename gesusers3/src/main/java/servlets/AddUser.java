@@ -16,7 +16,7 @@ import forms.UserForm;
 public class AddUser extends HttpServlet
 {
     // Correct path to match the actual file name
-    private static final String VUE_AJOUT_UTILISATEUR = "/WEB-INF/ajouterUtilisateur.jsp";
+    private static final String VUE_AJOUT_UTILISATEUR = "/WEB-INF/ajouterUtilisateurs.jsp";
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
