@@ -14,6 +14,7 @@ import dao.UtilisateurDao;
 @WebServlet("/list")
 public class ListUser extends HttpServlet 
 {
+    private static final long serialVersionUID = 1L;
     private static final String VUE_LIST_UTILISATEUR = "/WEB-INF/listerUtilisateurs.jsp";
 
     @Override

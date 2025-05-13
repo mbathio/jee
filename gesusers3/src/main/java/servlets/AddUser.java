@@ -15,7 +15,7 @@ import forms.UserForm;
 @WebServlet("/add")
 public class AddUser extends HttpServlet
 {
-    // Correct path to match the actual file name
+    private static final long serialVersionUID = 1L;
     private static final String VUE_AJOUT_UTILISATEUR = "/WEB-INF/ajouterUtilisateurs.jsp";
     
     @Override

@@ -2,7 +2,7 @@
                 
     
     
-    <wb-module deploy-name="gesusers">
+    <wb-module deploy-name="gesusers3">
                                 
         
         
@@ -14,8 +14,8 @@
                                 
         
         
-        <property name="java-output-path" value="/gesusers/build/classes"/>
-        <property name="context-root" value="gesusers4"/>
+        <property name="java-output-path" value="/gesusers3/build/classes"/>
+        <property name="context-root" value="gesusers3"/>
                             
     
     
